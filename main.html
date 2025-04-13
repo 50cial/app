@@ -26,10 +26,11 @@
 <div id="actions"></div>
 
 <script>
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbzddfrwYRPU5MEJqt3Kq95V58qBMbiGGpbgnxZbJT9lDiO_pyqi_sPnoBgMw1f1mUWg/exec';
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbxg4cEM6Civr0kFmrdd4QB16uo1TI0dgGtbJG0ohkXtedh-ynIdl-FwhaR7T9rccxkG/exec';
   const key = localStorage.getItem('secret');
   const email = localStorage.getItem('c_local');
-  if (!key || !email) window.location.href = 'index.html';
+
+  if (!key) window.location.href = 'index.html';
 
   function showAbout() {
     document.getElementById('aboutDiv').style.display = 'block';
@@ -45,7 +46,7 @@
     document.getElementById('aboutBtn').classList.remove('active');
   }
 
-  fetch(`${scriptURL}?action=main&key=${encodeURIComponent(key)}&email=${encodeURIComponent(email)}`)
+  fetch(`${scriptURL}?action=main&key=${encodeURIComponent(key)}&email=${encodeURIComponent(email || 'guest@crickskill.com')}`)
     .then(res => res.json())
     .then(data => {
       document.getElementById('loader').style.display = 'none';
@@ -64,8 +65,13 @@
 
       const actions = document.getElementById('actions');
       const btn = document.createElement('button');
-      btn.textContent = data.ownsCourse ? '👀 Watch' : '🛍️ Buy Now';
-      btn.onclick = () => window.location.href = data.ownsCourse ? 'view.html' : 'buy.html';
+      if (email) {
+        btn.textContent = data.ownsCourse ? '👀 Watch' : '🛍️ Buy Now';
+        btn.onclick = () => window.location.href = data.ownsCourse ? 'view.html' : 'buy.html';
+      } else {
+        btn.textContent = '🛍️ Buy Now';
+        btn.onclick = () => window.location.href = 'login.html';
+      }
       actions.appendChild(btn);
     });
 </script>
