@@ -12,7 +12,7 @@
   #slider-container > img { border-radius: 12px; max-height: 300px; max-width: 400px; }
   #username > p , #username > span { font-size: 22px; font-weight: 400; }
   #username { margin: 10px; }
-  .header { border-radius: 12px; margin: -50px 0 0 0; padding: 50px 0 10px 0; background: #3992f6; }
+  .header { border-radius: 12px; margin: -50px 0 0 0; padding: 50px 0 10px 0; background: #0088cc; }
   #cards { display: flex; flex-wrap: wrap; gap: 16px; padding: 10px; justify-content: center; }
   #cards div { flex: 0 1 calc(50% - 16px); border-radius: 12px; overflow: hidden; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; background-color: #dddd; text-align: center; padding-bottom: 10px; transition: transform 0.2s ease; }
   #cards div:hover { transform: translateY(-5px); }
@@ -40,9 +40,9 @@
   <p style="display: none;">Coins: <span id="coinCount">0</span></p>
   <div class="hyperlink">
     <a onclick="reload()"><i class="fa-solid fa-house"></i> &nbsp;&nbsp;Home</a>
-    <a href="http://wa.me/917702503028"><i class="fa-solid fa-headphones-simple"></i> &nbsp;&nbsp;Help</a>
+    <a href="http://wa.me/918987726266"><i class="fa-solid fa-headphones-simple"></i> &nbsp;&nbsp;Help</a>
     <a href="history.html"><i class="fa-solid fa-clipboard-check"></i> &nbsp;&nbsp;&nbsp;Orders</a>
-    <a onclick="logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> &nbsp;&nbsp;Logout</a>
+    <a id="logoutBtn" onclick="logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> &nbsp;&nbsp;Logout</a>
   </div>
 </div>
 
@@ -56,24 +56,24 @@
   </div>
   <div class="text"><h2>Courses</h2></div>
   <div id="cards"></div>
-  <a href="https://t.me/+K0REUzWxMpA3NTNl" class="telegram">
+  <a href="#" class="telegram">
     <i class="fa-brands fa-telegram"></i>
   </a>
 </div>
 <div id="loader" style="display:flex;justify-content:center;align-items:center;"><div class="loader"></div></div>
 
 <script>
-  function reload(){
+  function reload() {
     location.reload();
   }
 
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbx7qhap-R7RKoImz8J1UzLgJA3zUxqd8MjhfucVVJc_Gl0ugdN9DNdSDW14vIiZpqWl/exec';
-  const email = localStorage.getItem('c_local');
-  if (!email) window.location.href = "login.html";
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbxrb5KvkF2XK3xFQdORVsCGk7cRjTYNw8OpwNfnHGv9lJx7PGGiDW4Ut3tdgRQhd1Zn/exec';
+  const email = localStorage.getItem('c_local') || "guest@crickskill.com";
 
   const menuBtn = document.getElementById('menuBtn');
   const sideMenu = document.getElementById('sideMenu');
   const overlay = document.getElementById('overlay');
+  const logoutBtn = document.querySelector(".hyperlink a[onclick='logout()']");
 
   menuBtn.onclick = () => {
     sideMenu.classList.add('open');
@@ -88,8 +88,16 @@
   }
 
   function logout() {
-    localStorage.removeItem('c_local');
-    window.location.href = "login.html";
+    if (localStorage.getItem('c_local')) {
+      localStorage.removeItem('c_local');
+      window.location.href = "login.html";
+    } else {
+      window.location.href = "login.html";
+    }
+  }
+
+  if (!localStorage.getItem('c_local')) {
+    logoutBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> &nbsp;&nbsp;Login`;
   }
 
   fetch(scriptURL + '?action=index&email=' + encodeURIComponent(email))
@@ -99,9 +107,10 @@
       document.getElementById("mainContent").style.display = "block";
       menuBtn.style.display = "block";
 
-      document.getElementById("username").innerHTML = "<p>Hey Dear, </p> <span>" + data.username + "</span>";
-      document.getElementById("sider-name").innerHTML = `<span>Hey,</span><p>${data.username}</p>`;
-      document.getElementById("coinCount").innerHTML = data.coins;
+      const userName = data.username || "Guest";
+      document.getElementById("username").innerHTML = "<p>Hey Dear, </p> <span>" + userName + "</span>";
+      document.getElementById("sider-name").innerHTML = `<span>Hey,</span><p>${userName}</p>`;
+      document.getElementById("coinCount").innerHTML = data.coins || 0;
 
       let sliderIndex = 0;
       const images = data.slider;
