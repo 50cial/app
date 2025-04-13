@@ -8,9 +8,13 @@
 #title , #price { margin: 0 0 0 10px; }
 #aboutDiv , #descriptionDiv { margin: 10px; }
 #buttons { display: flex; justify-content: space-around; }
+button { cursor: pointer; }
 #buttons > button { padding: 6px; width: 140px; border: none; background: none; border-bottom: 2px solid; text-transform: uppercase; font-size: 18px; font-weight: 500; }
 #buttons .active { border-bottom: 2px solid #382fe3; }
 #actions > button { border-radius: 125px; text-transform: uppercase; margin: 5px 10px; padding: 10px; width: 180px; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; font-size: 19px; background: #d92569; color: #fff; font-weight: 600; border: none; }
+@media only screen and (min-width: 768px) {
+  #slider img { width: 500px; height: 300px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+}
 </style>
 
 <div id="loader" style="display:flex;"><div class="loader"></div></div>
